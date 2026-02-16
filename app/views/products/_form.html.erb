@@ -1,0 +1,29 @@
+<%= form_with model: product do |f| %>
+  <% if product.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% product.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="input-group">
+    <%= f.text_field :name, placeholder: "Product name" %>
+  </div>
+
+  <div class="input-group">
+    <%= f.number_field :price, step: 0.01, placeholder: "Price" %>
+  </div>
+
+  <div class="input-group">
+    <%= f.number_field :stock, placeholder: "Stock" %>
+  </div>
+
+  <div class="input-group">
+    <%= f.text_field :category, placeholder: "Category" %>
+  </div>
+
+  <%= f.submit class: "btn primary full" %>
+<% end %>

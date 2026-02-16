@@ -1,0 +1,16 @@
+<div class="page-card">
+  <h1><%= @product.name %></h1>
+
+  <ul class="detail-list">
+    <li><strong>Price:</strong> $<%= @product.price %></li>
+    <li><strong>Stock:</strong> <%= @product.stock %></li>
+    <li><strong>Category:</strong> <%= @product.category %></li>
+    <li><strong>Created by:</strong> <%= @product.created_by %></li>
+    <li><strong>Updated by:</strong> <%= @product.updated_by %></li>
+  </ul>
+
+  <div class="actions">
+    <%= link_to "Edit", edit_product_path(@product), class: "btn outline" %>
+   <%= link_to "← Back", products_path, class: "btn ghost back-link" %>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="auth-card">
+  <h1>Welcome Back</h1>
+  <p class="auth-subtitle">Login to your account</p>
+
+  <% if flash[:alert] %>
+    <div class="error-box">
+      <div class="error-item"><%= flash[:alert] %></div>
+    </div>
+  <% end %>
+
+  <%= form_with model: resource,
+      as: resource_name,
+      url: session_path(resource_name),
+      data: { turbo: false },
+      class: "auth-form" do |f| %>
+
+    <div class="input-group">
+      <%= f.email_field :email,
+          placeholder: "Email",
+          autofocus: true %>
+    </div>
+
+    <div class="input-group password-group">
+      <%= f.password_field :password,
+          placeholder: "Password",
+          id: "login-password",
+          class: "password-input" %>
+
+      <span class="toggle-password"
+            data-target="login-password">
+        👁
+      </span>
+    </div>
+
+
+    <%= f.submit "Login", class: "btn primary full" %>
+  <% end %>
+
+  <div class="auth-footer">
+    Don’t have an account?
+    <%= link_to "Sign up", new_user_registration_path %>
+  </div>
+</div>

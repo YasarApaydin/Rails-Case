@@ -1,0 +1,112 @@
+<div class="auth-card">
+  <h1>Create account</h1>
+  <p class="auth-subtitle">Start managing your products professionally</p>
+
+  <%= form_with model: resource,
+    as: resource_name,
+    url: registration_path(resource_name),
+    html: { id: "registration-form", class: "auth-form", autocomplete: "off" },
+    data: { turbo: false } do |f| %>
+
+
+    <div class="input-group">
+      <%= f.email_field :email, placeholder: "Email address", id: "user-email" %>
+     
+    </div> <div class="field-error" id="error-email"></div>
+
+    <div class="input-group password-group">
+      <%= f.password_field :password,
+            id: "user-password",
+            placeholder: "Password",
+            class: "password-input" %>
+      <span class="toggle-password" data-target="user-password">👁</span>
+   
+    </div>
+   <div class="field-error" id="error-password"></div>
+    <div class="input-group password-group">
+      <%= f.password_field :password_confirmation,
+            id: "user-password-confirm",
+            placeholder: "Confirm Password",
+            class: "password-input" %>
+      <span class="toggle-password" data-target="user-password-confirm">👁</span>
+     
+    </div>
+ <div class="field-error" id="error-password-confirm"></div>
+   <button type="button" id="register-btn" class="btn primary full">
+  Create account
+</button>
+
+    <div id="form-errors" class="form-errors"></div>
+  <% end %>
+
+  <div class="auth-footer">
+    Already have an account?
+    <%= link_to "Login", new_user_session_path %>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("register-btn");
+
+  btn.addEventListener("click", async () => {
+    const email = document.getElementById("user-email").value;
+    const password = document.getElementById("user-password").value;
+    const passwordConfirmation =
+      document.getElementById("user-password-confirm").value;
+
+    document.querySelectorAll(".field-error").forEach(el => el.textContent = "");
+    document.getElementById("form-errors").innerHTML = "";
+
+    const response = await fetch("/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        user: {
+          email,
+          password,
+          password_confirmation: passwordConfirmation
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      data.errors.forEach(msg => {
+        const m = msg.toLowerCase();
+        if (m.includes("email"))
+          document.getElementById("error-email").textContent = msg;
+        else if (m.includes("confirmation"))
+          document.getElementById("error-password-confirm").textContent = msg;
+        else if (m.includes("password"))
+          document.getElementById("error-password").textContent = msg;
+        else {
+          const p = document.createElement("p");
+          p.textContent = msg;
+          document.getElementById("form-errors").appendChild(p);
+        }
+      });
+    } else {
+      alert("Kayıt başarılı");
+      window.location.href = "/";
+    }
+  });
+});
+</script>
+
+
+
+<style>
+.field-error {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 2px;
+}
+.form-errors p {
+  color: red;
+  margin: 2px 0;
+}
+</style>

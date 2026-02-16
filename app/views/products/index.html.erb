@@ -1,0 +1,78 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Products</h1>
+      <p class="page-subtitle">Manage your product catalog</p>
+    </div>
+
+    <%= link_to "＋ New Product", new_product_path, class: "btn primary" %>
+  </div>
+
+  <div style="display:flex; gap:10px; margin-bottom:20px;">
+    <%= button_to "DB → Google Sheet",
+        sync_to_sheet_products_path,
+        method: :post,
+        class: "btn btn-primary",
+        form: { data: { turbo: false } } %>
+
+    <%= button_to "Google Sheet → DB",
+        sync_from_sheet_products_path,
+        method: :post,
+        class: "btn btn-secondary",
+        form: { data: { turbo: false } } %>
+  </div>
+
+  <div class="table-card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Category</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td>
+              <strong><%= product.name %></strong>
+            </td>
+            <td>$<%= product.price %></td>
+            <td>
+              <span class="badge <%= product.stock.to_i > 0 ? 'success' : 'danger' %>">
+                <%= product.stock %>
+              </span>
+            </td>
+            <td><%= product.category %></td>
+            <td class="actions text-right">
+
+              <%= link_to "View", product_path(product), class: "btn ghost small" %>
+
+              <%= link_to "Edit", edit_product_path(product), class: "btn outline small" %>
+
+              <!-- SOFT DELETE -->
+              <%= button_to "Soft Delete",
+                  product_path(product),
+                  method: :delete,
+                  onclick: "return confirm('Soft delete yapmak istediğinize emin misiniz?')",
+                  class: "btn warning small",
+                  form: { data: { turbo: false } } %>
+
+              <!-- HARD DELETE -->
+              <%= button_to "Hard Delete",
+                  hard_delete_product_path(product),
+                  method: :delete,
+                  onclick: "return confirm('Bu ürün kalıcı olarak silinecek! Emin misiniz?')",
+                  class: "btn danger small",
+                  form: { data: { turbo: false } } %>
+
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
