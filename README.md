@@ -1,41 +1,106 @@
-# README
+# Rails-Case Uygulaması — Kurulum ve Çalıştırma
 
-1. Depoyu klonlayın
+
+
+---
+
+## 1️⃣ Depoyu klonlayın
+
+```bash
 
 git clone <repo-url>
 cd rails-case
 
 
-2. Docker ile uygulamayı ayağa kaldırın
+
+2️⃣ Ortam değişkenlerini ayarlayın
+
+Proje kök dizininde .env dosyası oluşturun ve Google Sheet ID’nizi ekleyin:
+
+GOOGLE_SHEET_ID=<google-sheet-id>
+
+
+
+3️⃣ Google Sheets API için Service Account oluşturun
+
+Google Cloud Console’a gir: https://console.cloud.google.com/
+
+Eğer yoksa bir proje oluşturun (New Project).
+
+Proje seçili iken APIs & Services → Credentials bölümüne gidin.
+
+3.1 Service Account oluşturun
+
+“Create Credentials → Service Account” seçin
+
+İsim verin, örn: google_sheets_service
+
+Role olarak Editor veya sadece Sheets API erişimi verebilirsiniz
+
+“Create” ve “Done” ile hesabı oluşturun
+
+3.2 JSON key indirin
+
+Oluşturduğunuz Service Account’a tıklayın
+
+Keys → Add Key → Create new key → JSON
+
+JSON dosyası bilgisayarınıza inecek
+
+3.3 JSON dosyasını projeye ekleyin
+
+JSON dosyasını kopyalayın:
+
+rails-case/config/google/service_account.json
+
+
+.gitignore içinde bu dosyanın ekli olduğundan emin olun:
+
+/config/google/service_account.json
+
+4️⃣ Docker ile uygulamayı ayağa kaldırın
+
+Projeyi Docker ile çalıştırmak için:
 
 docker compose build --no-cache
 docker compose up -d
 
 
-Not: Eğer docker compose down -v çalıştırırsanız, tüm volume’lar silinir. Bu durumda web container’ı yeniden build etmeniz gerekir.
+Not: Eğer docker compose down -v çalıştırırsanız, tüm volume’lar silinir. Bu durumda web container’ı yeniden build etmeniz gerekir:
 
+docker compose build --no-cache
+docker compose up -d
 
-
-3. Veritabanını oluşturun ve migrate edin
-
+5️⃣ Veritabanını oluşturun ve migrate edin
 docker compose exec web bin/rails db:create
 docker compose exec web bin/rails db:migrate
 
-
-4. Rails sunucusunu çalıştırın
+6️⃣ Rails sunucusunu çalıştırın
 docker compose up
-docker compose up -d /dteç modda calıştırmak için 
+# veya arka planda çalıştırmak için:
+docker compose up -d
 
-Uygulamaya http://localhost:3000 adresinden erişebilirsiniz.
 
-5. docker-compose.yml içinde tanımlı olmayan eski veya terk edilmiş container’ları siler.Yapmak mecburi değil.
+Uygulamaya tarayıcıdan erişin: http://localhost:3000
+
+7️⃣ Eski veya terk edilmiş container’ları silmek (opsiyonel)
 docker compose down --remove-orphans
 
+8️⃣ Google Sheet kullanımı
 
-Google Sheet Tablosu A2(A3,A4,A5....) den L colonuna kadar bilgileri getirir listeler.
-Aynı Şekilde B2 den E2 ye kadar yani (name,price,stock,category) bilgileri yazarsanız ve google sheet -> Db butonuna 
-basarsanız ekler veritabanına. tabi bunun altına ekleyerek listeli bir halde yani coklu bir şekilde alt altına veri girerek ekleyebilirsiniz.
-id	name	price	stock	category	created_by	updated_by	deleted_at	is_deleted	created_at	updated_at	errors
-A1 den L1 e kadar bunları yazıp bu şekilde listeletiyorum.
-Veri eklerkende sadece name,price,stock,category kolonlarına örnek veri yazıp butonla ekliyorum. Tabi yazarken bilerek yanlış yazarsam errors kolonuna hatası yazıyor. 
+Sheet tablosu A2’den L kolonuna kadar veri alır ve listeler.
 
+Veri eklerken name, price, stock, category kolonlarına veri yazın ve Google Sheet → DB butonuna basın.
+
+Birden fazla veri eklemek için, alt alta veri yazabilirsiniz.
+
+Eğer yanlış veri girerseniz, errors kolonuna hata mesajı düşer.
+
+Sheet kolonları:
+
+| A  | B    | C     | D     | E        | F          | G          | H          | I          | J          | K          | L      |
+| -- | ---- | ----- | ----- | -------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ------ |
+| id | name | price | stock | category | created_by | updated_by | deleted_at | is_deleted | created_at | updated_at | errors |
+
+
+Not: Eklerken sadece name, price, stock, category kolonlarını doldurmanız yeterlidir. Hatalı veri girildiğinde errors kolonuna yazılır.

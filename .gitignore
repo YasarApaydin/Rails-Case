@@ -33,3 +33,8 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Google service account credentials
+/config/google/service_account.json
+
+# Environment files
+/.env
