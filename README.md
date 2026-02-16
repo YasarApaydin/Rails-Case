@@ -104,3 +104,4 @@ Sheet kolonları:
 
 
 Not: Eklerken sadece name, price, stock, category kolonlarını doldurmanız yeterlidir. Hatalı veri girildiğinde errors kolonuna yazılır.
+Not: .env ve config altındaki google klasörü içindeki service_account.json klasörünü githuba pushlarken ekleyemedim. Github izin vermedi. Şifre ve bazı bilgiler içerdiği için.
