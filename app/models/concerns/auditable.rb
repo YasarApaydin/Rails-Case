@@ -25,10 +25,10 @@ module Auditable
   private
 
   def set_created_by
-    self.created_by ||= Current.user
+    self.created_by ||= Current.user&.email
   end
 
   def set_updated_by
-    self.updated_by = Current.user
+    self.updated_by = Current.user&.email
   end
 end

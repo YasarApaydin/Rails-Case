@@ -29,7 +29,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_145513) do
     t.index ["is_deleted"], name: "index_products_on_is_deleted"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
